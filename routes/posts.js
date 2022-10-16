@@ -1,5 +1,5 @@
 import { Router } from "express";
-import Users from "../classes/Users";
+import Users from "../lib/classes/Users";
 const user = new Users();
 const router = Router();
 router.post("/createUser", async (req, res) => {
@@ -8,7 +8,8 @@ router.post("/createUser", async (req, res) => {
     const newUser = await user.createUser(data);
     return res.json(newUser);
   } catch (error) {
-    throw res.status(400).send(error.message || "Error");
+    console.log(error);
+    return res.status(400).send(error.message || error || "Error");
   }
 });
 export default router;

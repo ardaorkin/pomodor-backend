@@ -1,5 +1,5 @@
 import { Router } from "express";
-import Users from "../classes/Users";
+import Users from "../lib/classes/Users";
 const router = Router();
 const user = new Users();
 router.get("/", (req, res) => {
