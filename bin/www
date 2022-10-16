@@ -8,12 +8,14 @@ var app = require("../app");
 var debug = require("debug")("pomodoro-backend:server");
 var http = require("http");
 const { default: connectToDB } = require("../db/connect");
+const dotenv = require("dotenv");
+dotenv.config({ path: "pomodoros.env" });
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || "3000");
+var port = normalizePort(process.env.PORT);
 app.set("port", port);
 
 /**
