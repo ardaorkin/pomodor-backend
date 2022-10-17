@@ -10,6 +10,14 @@ class Pomodoros {
       throw error;
     }
   }
+  async listUsersPomodoros({ user_id }) {
+    try {
+      const pomodorosList = await PomodorosModel.find({ user_id });
+      return pomodorosList;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default Pomodoros;

@@ -8,3 +8,5 @@ services:
       dockerfile: ./Dockerfile
     env_file:
       - pomodoros.env
+    ports:
+      - 3000:3000
