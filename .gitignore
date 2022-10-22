@@ -206,3 +206,5 @@ dist
 pomodoros.env
 .vscode
 build
+id_rsa
+id_rsa.pub
