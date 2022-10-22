@@ -9,8 +9,11 @@ const router = Router();
 router.post("/signup", async (req, res) => {
   try {
     const data = req.body;
-    const newUser = await user.createUser(data);
-    return res.json(newUser);
+    const passForJWT = data.password;
+    await user.createUser(data);
+    const jwtData = { username: data.username, password: passForJWT };
+    const token = await auth.createJWT(jwtData);
+    return res.json({ token });
   } catch (error) {
     return res.status(400).send(error.message || error || "Error");
   }

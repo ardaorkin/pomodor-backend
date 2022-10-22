@@ -23,6 +23,9 @@ class Users {
       data.password = hashedPassword;
       const newUser = new UsersModel(data);
       const createdUser = await newUser.save();
+      const userJSON = createdUser.toJSON();
+      delete userJSON.password;
+      delete userJSON._id;
       return createdUser;
     } catch (error) {
       throw error;
