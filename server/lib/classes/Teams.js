@@ -71,6 +71,17 @@ class Teams {
       throw error;
     }
   }
+
+  async myTeam(user) {
+    try {
+      const myTeam = await TeamsModel.find({ members: user }).populate(
+        "members"
+      );
+      return myTeam;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default Teams;

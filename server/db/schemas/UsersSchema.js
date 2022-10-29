@@ -20,7 +20,7 @@ const UsersSchema = new Schema({
   },
   first_name: String,
   last_name: String,
-  role: String,
+  onPomodoro: { type: Boolean, default: false },
 });
 
 export default UsersSchema;
