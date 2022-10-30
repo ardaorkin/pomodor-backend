@@ -37,6 +37,7 @@ async function teamTest() {
     //   members: ["635d202df69381bbbb0a5715"],
     // });
     // await teams.myTeam("63540c7779782dd8073a6ad8");
+    await teams.isTeamOwner({});
   } catch (error) {
     console.log(error.message);
   } finally {

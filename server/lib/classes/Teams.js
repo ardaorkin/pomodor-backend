@@ -30,19 +30,18 @@ class Teams {
     }
   }
 
-  async addMembers(data) {
+  async addMembers({ members, teamID }) {
     try {
-      const { members: membersWillAdd, teamID: _id } = data;
-      const teamData = await TeamsModel.findById(_id).select(["members"]);
+      const teamData = await TeamsModel.findById(teamID).select(["members"]);
       const memberIds = teamData.members.map((membersId) =>
         membersId.toString()
       );
       const newSet = new Set();
-      const allMembers = membersWillAdd.concat(memberIds);
+      const allMembers = members.concat(memberIds);
       const membersSet = new Set([...newSet, ...allMembers]);
       const membersArray = Array.from(membersSet);
       const response = await TeamsModel.updateOne(
-        { _id },
+        { _id: teamID },
         { members: membersArray }
       );
       return response;
@@ -51,10 +50,9 @@ class Teams {
     }
   }
 
-  async removeMembers(data) {
+  async removeMembers({ members, teamID }) {
     try {
-      const { members, teamID: _id } = data;
-      const teamData = await TeamsModel.findById(_id);
+      const teamData = await TeamsModel.findById(teamID);
       const memberIds = teamData.members.map((memberIds) =>
         memberIds.toString()
       );
@@ -63,7 +61,7 @@ class Teams {
         memberIds.splice(memberIndex, 1);
       });
       const response = await TeamsModel.updateOne(
-        { _id },
+        { _id: teamID },
         { members: memberIds }
       );
       return response;
@@ -72,12 +70,23 @@ class Teams {
     }
   }
 
-  async myTeam(user) {
+  async myTeam({ userID }) {
     try {
-      const myTeam = await TeamsModel.find({ members: user }).populate(
-        "members"
+      const myTeam = await TeamsModel.findOne({ members: userID }).populate(
+        "members",
+        "username email first_name last_name"
       );
       return myTeam;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async isTeamOwner({ userID, teamID }) {
+    try {
+      const teamData = await TeamsModel.find({ owner: userID, _id: teamID });
+      if (teamData?.length > 0) return true;
+      throw new Error("Not team owner.");
     } catch (error) {
       throw error;
     }
