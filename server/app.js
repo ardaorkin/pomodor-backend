@@ -1,5 +1,6 @@
 import gets from "./routes/gets";
 import posts from "./routes/posts";
+import puts from "./routes/puts";
 import cors from "cors";
 var createError = require("http-errors");
 var express = require("express");
@@ -13,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use("/api/v1", [gets, posts]);
+app.use("/api/v1", [gets, posts, puts]);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

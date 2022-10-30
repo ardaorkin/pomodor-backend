@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon ./server/bin/www --exec babel-node -e js",
+    "test": "babel-node ./tests/teams.test.js",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./server -s",
     "build": "npm run clean && npm run build-babel",

@@ -1,10 +1,12 @@
 import { Router } from "express";
 import Auth from "../lib/classes/Auth";
 import Pomodoros from "../lib/classes/Pomodoros";
+import Teams from "../lib/classes/Teams";
 import Users from "../lib/classes/Users";
 const user = new Users();
 const auth = new Auth();
 const pomodoro = new Pomodoros();
+const teams = new Teams();
 const router = Router();
 router.post("/signup", async (req, res) => {
   try {
@@ -45,6 +47,61 @@ router.post("/createPomodoro", async (req, res) => {
       user_id: _id,
     });
     return res.json(newPomodoro);
+  } catch (error) {
+    return res.status(400).send(error.message || error || "Error");
+  }
+});
+
+router.post("/createTeam", async (req, res) => {
+  try {
+    const { authorization } = req.headers;
+    const decodedJWT = await auth.validateJWT(authorization);
+    const userData = await user.getUser(decodedJWT);
+    const { _id } = userData;
+    const { name, members } = req.body;
+    let membersWillAdd = [];
+    if (!members || members.length === 0) {
+      membersWillAdd.push(_id);
+    } else {
+      membersWillAdd = [...members];
+    }
+    const newTeam = await teams.createTeam({
+      name,
+      members: membersWillAdd,
+      owner: _id,
+    });
+    return res.json(newTeam);
+  } catch (error) {
+    return res.status(400).send(error.message || error || "Error");
+  }
+});
+
+router.post("/isTeamOwner", async (req, res) => {
+  try {
+    const { authorization } = req.headers;
+    const decodedJWT = await auth.validateJWT(authorization);
+    const userData = await user.getUser(decodedJWT);
+    const { _id } = userData;
+    const { teamID } = req.body;
+    const isTeamOwner = await teams.isTeamOwner({ userID: _id, teamID });
+    return res.json({ isTeamOwner });
+  } catch (error) {
+    return res.status(400).send(error.message || error || "Error");
+  }
+});
+
+router.post("/removeMembers", async (req, res) => {
+  try {
+    const { authorization } = req.headers;
+    const decodedJWT = await auth.validateJWT(authorization);
+    const userData = await user.getUser(decodedJWT);
+    const { _id } = userData;
+    const { teamID, members } = req.body;
+    const isTeamOwner = await teams.isTeamOwner({ userID: _id, teamID });
+    if (isTeamOwner) {
+      const result = await teams.removeMembers({ members, teamID });
+      return res.json(result);
+    }
   } catch (error) {
     return res.status(400).send(error.message || error || "Error");
   }
