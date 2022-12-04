@@ -7,9 +7,21 @@ class Users {
     this.createUser = this.createUser.bind(this);
     this.checkUserExist = this.checkUserExist.bind(this);
   }
-  async getUsers() {
+  async getUsers(searchStr) {
     try {
-    } catch (error) {}
+      if (searchStr.length > 2) {
+        const users = await UsersModel.find(
+          {
+            username: { $regex: searchStr },
+          },
+          { password: 0, __v: 0 }
+        );
+        return users;
+      }
+      return [];
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async createUser(data) {

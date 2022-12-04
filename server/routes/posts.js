@@ -106,4 +106,29 @@ router.post("/removeMembers", async (req, res) => {
     return res.status(400).send(error.message || error || "Error");
   }
 });
+
+router.post("/search", async (req, res) => {
+  try {
+    const { username } = req.body;
+    const { authorization } = req.headers;
+    await auth.validateJWT(authorization);
+    const users = await user.getUsers(username);
+    return res.json(users);
+  } catch (error) {
+    return res.status(400).send(error.message || error || "Error");
+  }
+});
+
+router.post("/addmembers", async (req, res) => {
+  try {
+    const { members, teamID } = req.body;
+    const { authorization } = req.headers;
+    await auth.validateJWT(authorization);
+    const response = await teams.addMembers({ members, teamID });
+    return res.json(response);
+  } catch (error) {
+    return res.status(400).send(error.message || error || "Error");
+  }
+});
+
 export default router;
