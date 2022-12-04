@@ -22,4 +22,18 @@ router.put("/addMembers", async (req, res) => {
     return res.status(400).send(error.message || error || "Error");
   }
 });
+
+router.put("/onPomodoro", async (req, res) => {
+  try {
+    const { authorization } = req.headers;
+    const { status } = req.body;
+    const decodedJWT = await auth.validateJWT(authorization);
+    const { _id } = decodedJWT;
+    const pomodoroStatus = await user.onPomodoro({ _id, status });
+    return res.json(pomodoroStatus);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send(error.message || error || "Error");
+  }
+});
 export default router;

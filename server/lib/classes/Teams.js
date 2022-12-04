@@ -74,7 +74,7 @@ class Teams {
     try {
       const myTeam = await TeamsModel.findOne({ members: userID }).populate(
         "members",
-        "username email first_name last_name"
+        "username email first_name last_name onPomodoro"
       );
       return myTeam;
     } catch (error) {

@@ -73,6 +73,18 @@ class Users {
       throw error;
     }
   }
+
+  async onPomodoro({ _id, status }) {
+    try {
+      const pomodoroStatus = await UsersModel.updateOne(
+        { _id },
+        { onPomodoro: status }
+      );
+      return pomodoroStatus;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default Users;

@@ -94,8 +94,7 @@ router.post("/removeMembers", async (req, res) => {
   try {
     const { authorization } = req.headers;
     const decodedJWT = await auth.validateJWT(authorization);
-    const userData = await user.getUser(decodedJWT);
-    const { _id } = userData;
+    const { _id } = decodedJWT;
     const { teamID, members } = req.body;
     const isTeamOwner = await teams.isTeamOwner({ userID: _id, teamID });
     if (isTeamOwner) {
