@@ -25,14 +25,13 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.get("/user/pomodoros", async (req, res) => {
+router.get("/myPomodoros", async (req, res) => {
   try {
     const {
       headers: { authorization },
     } = req;
     const decodedJWT = await auth.validateJWT(authorization);
-    const userData = await user.getUser(decodedJWT);
-    const { _id } = userData;
+    const { _id } = decodedJWT;
     const pomodorosList = await pomodoros.listUsersPomodoros({ user_id: _id });
     return res.json(pomodorosList);
   } catch (error) {

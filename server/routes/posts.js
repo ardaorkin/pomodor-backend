@@ -35,14 +35,13 @@ router.post("/createPomodoro", async (req, res) => {
   try {
     const {
       headers: { authorization },
-      body: { date, length },
+      body: { length },
     } = req;
     const decodedJWT = await auth.validateJWT(authorization);
-    const userData = await user.getUser(decodedJWT);
-    const { _id } = userData;
+    const { _id } = decodedJWT;
 
     const newPomodoro = await pomodoro.createPomodoro({
-      date,
+      date: new Date().toISOString(),
       length,
       user_id: _id,
     });
