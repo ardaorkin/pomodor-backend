@@ -56,8 +56,7 @@ router.post("/createTeam", async (req, res) => {
   try {
     const { authorization } = req.headers;
     const decodedJWT = await auth.validateJWT(authorization);
-    const userData = await user.getUser(decodedJWT);
-    const { _id } = userData;
+    const { _id } = decodedJWT;
     const { name, members } = req.body;
     let membersWillAdd = [];
     if (!members || members.length === 0) {
